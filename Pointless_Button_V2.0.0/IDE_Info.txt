@@ -1,0 +1,4 @@
+If you are modifying it in the Arduino IDE, it will need to be opened in V1 of the software, V2 does not yet play nice for my liking.
+It will also need to be left in the containing folder or the Arduino IDE will not open it.
+
+If you are using any other IDE, I have no idea how to get you on the right path.
