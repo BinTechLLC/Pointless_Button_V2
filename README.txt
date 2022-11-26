@@ -1,4 +1,7 @@
 Pointless_Button_V2 - Last Updated 11-25-2022
+
+HARDWARE SUBJECT TO CHANGE!! - Current Hardware: ESP32_WROOM32_DEV_MODULE
+
 Just a heads up, this is my master notes doc and will change quite frequently while I am working on the project.
 
 
@@ -11,6 +14,7 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
 2 - Notes
 3 - Current Order Of Operations (How it works / runs)
 4 - Possible Future Plans
+5 - Guides I Need To Create
 
 
 
@@ -101,6 +105,15 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
      - *
 
 
+
+
+
+# ----------------------------------------------------------------------------------------------------------
+5                        How To Guides I Need To Create
+# ----------------------------------------------------------------------------------------------------------
+
+      - Create Firebase Realtime Database and Link to ESP32 (Other board instructions will vary and I will only be covering the hardware I use.
+      
 
 
 
