@@ -14,7 +14,7 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
 2 - Notes
 3 - Current Order Of Operations (How it works / runs)
 4 - Possible Future Plans
-5 - Guides I Need To Create
+5 - How To Guides I Need To Create
 
 
 
