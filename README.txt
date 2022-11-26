@@ -1,4 +1,4 @@
-Pointless_Button_V2 - Last Updated 11-25-2022
+Pointless_Button_V2 - Next Planned Release Version Date: February 2023
 
 HARDWARE SUBJECT TO CHANGE!! - Current Hardware: ESP32_WROOM32_DEV_MODULE
 
