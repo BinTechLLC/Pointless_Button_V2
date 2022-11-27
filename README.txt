@@ -30,8 +30,7 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
               - Basic Count Functions
               - Basic Firebase Write and Update Functions
               - Release and Beta Version Checker
-              - *Add Firebase Initial Setup Guide
-              - *Add Firebase Default Node Guide
+              - 
               - *
               
               
@@ -60,7 +59,8 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
      
      V2.0.1   - This is going to be a lot of extra functions and indicators for things normally moditored over serial.
      
-     V2.0.0   - The 1.0.0 to 1.10.10 versions are basicallt all in version 2.0.0.
+     V2.0.0   - The 1.0.0 through 1.10.10 versions are basically all in version 2.0.0 as the base version. I do plan on updating
+                  the code on hardware version 1 to match the new implimentations of the hardware version 2 stuff.
 
 
 
@@ -102,7 +102,7 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
      it into your computer, and upload a new sketch to change it. Might also need SD storage to keep those values unless I can figure out how to write
      values to EPROM or some other non-volatile means of storage.
      
-     - *
+     - ****
 
 
 
@@ -112,8 +112,9 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
 5                        How To Guides I Need To Create
 # ----------------------------------------------------------------------------------------------------------
 
-      - Create Firebase Realtime Database and Link to ESP32 (Other board instructions will vary and I will only be covering the hardware I use.
-      
+      - *Create Firebase Realtime Database and Link to ESP32 (Other board instructions will vary and I will only be covering the hardware I use.
+      - *Add Firebase Initial Setup Guide
+      - *Add Firebase Default Node Guide
 
 
 
