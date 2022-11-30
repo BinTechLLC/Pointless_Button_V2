@@ -34,7 +34,7 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
               - *
               
               
-     V2.0.1   - *Add LED Success / Fail Indicators for Boot and Updates
+     V2.0.1   - Add LED Success / Fail Indicators for Boot and Updates
               - *Add Button Combo to Trigger a Reboot
               - *Add Current SSID String and Firebase Entry
               - *Move Boot Cycle to its own String and FIrebase Entry
