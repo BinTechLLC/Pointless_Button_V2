@@ -27,8 +27,8 @@
 String currentLocalVersionNumber = "V2.0.1-Beta";
 String currentReleaseVersionNumber;
 String currentBetaReleaseVersionNumber;
-int writeAsNetPB = false; // Set this to true if creating new node.
-String pbName = "PB001-Alpha";
+int writeAsNetPB = false; // Set this to true if creating new node. (Currently Not Functional)
+String pbName = "PB###";
 int serialDebugOutput = true;
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Libraries
@@ -38,12 +38,12 @@ int serialDebugOutput = true;
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Credentials and Links
 //-----------------------------------------------------------------------------------------------------------------------
-#define FIREBASE_HOST "https://pointlessbuttonv2-2022-default-rtdb.firebaseio.com"
-#define FIREBASE_AUTH "Bddm9oBrsBKmjzKv9iUtwqO7JjpgJBwb4ObBqOra"
-const char* ssid2     = "BinTech LLC";
-const char* ssidpass2 = "FuckYouBitch123!@#";
-const char* ssid1     = "KB-N20U";
-const char* ssidpass1 = "RollYourButt123!@#";
+#define FIREBASE_HOST "https://YourHostToFirebase-default-rtdb.firebaseio.com"
+#define FIREBASE_AUTH "YourAPIKey"
+const char* ssid1     = "SSID1 Name";
+const char* ssidpass1 = "SSID1 Password";
+const char* ssid2     = "SSID2 Name";
+const char* ssidpass2 = "SSID2 Password";
 const char* externalHostname = "api.ipify.org";
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Definitions and States
