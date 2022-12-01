@@ -1,0 +1,9 @@
+V2.0.1-Beta - (I cant remember the date of the first upload of the beta so this is the stuff that was added to this point.)
+
+- ##-##-2022
+- 
+
+- 11-30-2022
+- Added LED Success / Fail Indicators for Boot and Updates
+- Added Current Connected SSID Firebase String
+- Moved Boot Cycles to its own Firebase String
