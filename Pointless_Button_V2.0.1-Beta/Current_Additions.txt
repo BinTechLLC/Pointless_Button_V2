@@ -3,6 +3,9 @@ V2.0.1-Beta
 - ##-##-2022
 - 
 
+- 11-30-2022
+- Add Firebase Read Entry for Serial Debug Output and Serial Count Output
+
 - 11-30-2022 (I cant remember the date of the first upload of the beta so this is the stuff that was added to this point.)
 - Added LED Success / Fail Indicators for Boot and Updates
 - Added Current Connected SSID Firebase String
