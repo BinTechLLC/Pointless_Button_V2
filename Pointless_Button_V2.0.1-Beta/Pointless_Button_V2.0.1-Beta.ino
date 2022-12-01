@@ -10,9 +10,9 @@
                 - Release and Beta Version Checker
 
       V2.0.1    - Add LED Success / Fail Indicators for Boot and Updates
-                - *Add Button Combo to Trigger a Reboot
-                - *Add Current SSID String and Firebase Entry
-                - *Move Boot Cycle to its own String and Firebase Entry
+                - (Not going to add, have had a lot of people mash multiple / all buttons at a time, would cause an unwanted reboot. ##Add Button Combo to Trigger a Reboot
+                - Add Current SSID String and Firebase Entry
+                - Move Boot Cycle to its own String and Firebase Entry
                 - *Add Remote LED Test Trigger
                 - *Local Web GUI
                 - *
@@ -27,8 +27,8 @@
 String currentLocalVersionNumber = "V2.0.1-Beta";
 String currentReleaseVersionNumber;
 String currentBetaReleaseVersionNumber;
-int writeAsNetPB = false; // Set this to true if creating new node. (Currently Not Functional)
-String pbName = "PB###";
+int writeAsNetPB = false; // Set this to true if creating new node.
+String pbName = "PB001-Alpha";
 int serialDebugOutput = true;
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Libraries
@@ -38,12 +38,12 @@ int serialDebugOutput = true;
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Credentials and Links
 //-----------------------------------------------------------------------------------------------------------------------
-#define FIREBASE_HOST "https://YourHostToFirebase-default-rtdb.firebaseio.com"
+#define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
 #define FIREBASE_AUTH "YourAPIKey"
-const char* ssid1     = "SSID1 Name";
-const char* ssidpass1 = "SSID1 Password";
-const char* ssid2     = "SSID2 Name";
-const char* ssidpass2 = "SSID2 Password";
+const char* ssid2     = "SSIDName1";
+const char* ssidpass2 = "SSIDPassword1";
+const char* ssid1     = "SSIDName2";
+const char* ssidpass1 = "SSIDPassword2";
 const char* externalHostname = "api.ipify.org";
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Definitions and States
@@ -97,6 +97,7 @@ int writeBootCycles;
 int firebaseCycle;
 int bootErrorCount;
 int updateErrorCount;
+String currentSSID;
 String rebootNode;
 WiFiServer server(portNumber);
 FirebaseData fbdo;
@@ -164,6 +165,7 @@ void wifiFirstConnect() {
         WiFi.disconnect();
         delay(500);
         WiFi.begin(ssid1, ssidpass1);
+        currentSSID = ssid1;
         connectRunCommand = 1;
       }
     }
@@ -178,6 +180,7 @@ void wifiFirstConnect() {
         WiFi.disconnect();
         delay(500);
         WiFi.begin(ssid2, ssidpass2);
+        currentSSID = ssid2;
         connectRunCommand = 3;
       }
     }
@@ -505,7 +508,7 @@ void wifiFirstConnect() {
   while (firebaseCycle == 13) {
     digitalWrite(greenLED1, LOW);
     digitalWrite(greenLED2, HIGH);
-    if (Firebase.getInt(fbdo, "/01-Counters/" + pbName + "/10-Count10")) {  // This Will Read The "/04-....." Directory
+    if (Firebase.getInt(fbdo, "/01-Counters/" + pbName + "/22-Boot_Count")) {  // This Will Read The "/04-....." Directory
       bootCycles = fbdo.intData();  // If The Read Was Successful, Count Will Be Updated With The String Data Received
       delay(defaultFirebaseReadDelay);
       if (serialDebugOutput == true) {
@@ -593,17 +596,42 @@ void wifiFirstConnect() {
         delay(5);
         bootCycles ++;
         delay(5);
-        if (Firebase.setInt(fbdo, "/01-Counters/" + pbName + "/10-Count10", bootCycles)) {
+        if (Firebase.setString(fbdo, "/01-Counters/" + pbName + "/21-Current_Connected_SSID", currentSSID)) {
           delay(defaultFirebaseWriteDelay);  // Defined At The Top
           if (serialDebugOutput) {
-            Serial.print("Write Successful of Boot Cycles (Count10), ");
-            Serial.println(bootCycles);
+            Serial.print("Write Successful of Current SSID.");
+            Serial.println(currentSSID);
           }
           firebaseCycle = 18;
         }
         else {
-          Serial.println("Write Failed of Boot Cycles (Count10).");
+          Serial.println("Write Failed of Current SSID.");
           firebaseCycle = 17;
+          bootErrorCount ++;
+        }
+      }
+    }
+  }
+  //----------------------------------------------------------------------------------------------------------------------- Write Boot Cycles
+  while (firebaseCycle == 18) {
+    digitalWrite(greenLED1, LOW);
+    digitalWrite(greenLED2, HIGH);
+    if (writeBootCycles == true) {
+      if (bootCycles >= 1) {
+        delay(5);
+        bootCycles ++;
+        delay(5);
+        if (Firebase.setInt(fbdo, "/01-Counters/" + pbName + "/22-Boot_Count", bootCycles)) {
+          delay(defaultFirebaseWriteDelay);  // Defined At The Top
+          if (serialDebugOutput) {
+            Serial.print("Write Successful of Boot Cycles.");
+            Serial.println(bootCycles);
+          }
+          firebaseCycle = 19;
+        }
+        else {
+          Serial.println("Write Failed of Boot Cycles.");
+          firebaseCycle = 18;
           bootErrorCount ++;
         }
       }
