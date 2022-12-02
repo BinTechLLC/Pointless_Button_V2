@@ -14,6 +14,7 @@
                 - Add Current SSID String and Firebase Entry
                 - Move Boot Cycle to its own String and Firebase Entry
                 - Add Firebase Read Entry for Serial Debug Output and Serial Count Output
+                Added NETBIOS name configuration to pull from pbName string so it no longer shows "esp32-arduino" on the network.
                 - *Add Remote LED Test Trigger
                 - *Local Web GUI
                 - *
@@ -40,12 +41,20 @@ String serialCountOutput;
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Credentials and Links
 //-----------------------------------------------------------------------------------------------------------------------
-  #define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
-  #define FIREBASE_AUTH "YourAPIKey"
-  const char* ssid2     = "SSIDName1";
-  const char* ssidpass2 = "SSIDPassword1";
-  const char* ssid1     = "SSIDName2";
-  const char* ssidpass1 = "SSIDPassword2";
+/*
+#define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
+#define FIREBASE_AUTH "YourAPIKey"
+const char* ssid2     = "SSIDName1";
+const char* ssidpass2 = "SSIDPassword1";
+const char* ssid1     = "SSIDName2";
+const char* ssidpass1 = "SSIDPassword2";
+*/
+#define FIREBASE_HOST "https://pointlessbuttonv2-2022-default-rtdb.firebaseio.com"
+#define FIREBASE_AUTH "Bddm9oBrsBKmjzKv9iUtwqO7JjpgJBwb4ObBqOra"
+const char* ssid2     = "BinTech LLC";
+const char* ssidpass2 = "FuckYouBitch123!@#";
+const char* ssid1     = "KB-N20U";
+const char* ssidpass1 = "RollYourButt123!@#";
 const char* externalHostname = "api.ipify.org";
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Definitions and States
@@ -149,6 +158,11 @@ String getExternalIP() {
 void wifiFirstConnect() {
   g1LEDState = 1;
   connectResetCount = 0;
+  //WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
+  WiFi.setHostname(pbName.c_str());
+  if (serialDebugOutput == "true") {
+    Serial.println(String("NETBIOS Name: ")+String(pbName));
+  }
   while (WiFi.status() != WL_CONNECTED) {
     connectResetCount ++ ;
     if (g1LEDState == 1) {
@@ -164,7 +178,7 @@ void wifiFirstConnect() {
         if (serialDebugOutput == "true") {
           Serial.println(String("Connecting to ") + ssid1);
         }
-        WiFi.disconnect();
+        WiFi.disconnect(true, true);
         delay(500);
         WiFi.begin(ssid1, ssidpass1);
         currentSSID = ssid1;
@@ -179,7 +193,7 @@ void wifiFirstConnect() {
         if (serialDebugOutput == "true") {
           Serial.println(String("Connecting to ") + ssid2);
         }
-        WiFi.disconnect();
+        WiFi.disconnect(true, true);
         delay(500);
         WiFi.begin(ssid2, ssidpass2);
         currentSSID = ssid2;
