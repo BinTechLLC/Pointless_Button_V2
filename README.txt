@@ -37,8 +37,12 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
      V2.0.1   - Add LED Success / Fail Indicators for Boot and Updates
               - (Not going to add, have had a lot of people mash multiple / all buttons at a time, would cause an unwanted reboot.
               ## Add Button Combo to Trigger a Reboot
-              - *Add Current SSID String and Firebase Entry
-              - *Move Boot Cycle to its own String and FIrebase Entry
+              - Add Current SSID String and Firebase Entry
+              - Move Boot Cycle to its own String and Firebase Entry
+              - Add Firebase Read Entry for Serial Debug Output and Serial Count Output
+              - Added NETBIOS name configuration to pull from pbName string so it no longer shows "esp32-arduino" on the network.
+              - *Add NTP Read and strftime Variables
+              - *Add Last Boot Time and Last Update Time Firebase Entries
               - *Local Web GUI
               - *Add Remote LED Test Trigger
               - *
