@@ -30,25 +30,26 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
               - Basic Count Functions
               - Basic Firebase Write and Update Functions
               - Release and Beta Version Checker
-              - 
-              - *
               
               
-     V2.0.1   - *Add LED Success / Fail Indicators for Boot and Updates
-              - *Add Button Combo to Trigger a Reboot
-              - *Add Current SSID String and Firebase Entry
-              - *Move Boot Cycle to its own String and FIrebase Entry
-              - *Local Web GUI
+     V2.0.1   - Add LED Success / Fail Indicators for Boot and Updates
+              - (Not going to add, have had a lot of people mash multiple / all buttons at a time, would cause an unwanted reboot.
+              ## Add Button Combo to Trigger a Reboot
+              - Add Current SSID String and Firebase Entry
+              - Move Boot Cycle to its own String and Firebase Entry
+              - Add Firebase Read Entry for Serial Debug Output and Serial Count Output
+              - Added NETBIOS name configuration to pull from pbName string so it no longer shows "esp32-arduino" on the network.
+              - Add NTP Read and strftime Variables
+              - Add Last Boot Time and Last Update Time Firebase Entries
               - *Add Remote LED Test Trigger
+              
+              
+     V2.0.2   - *Local Web GUI
+              - *Maybe App functionality
               - *
               
               
-     V2.1.0   - *Create Python Intermediate Server For Time Keeping
-              - *Last Boot Time Recording
-              - *Last Update Time Recording
-              - *
-
-
+     V2.1.0   - *
 
 
 # ----------------------------------------------------------------------------------------------------------
@@ -56,6 +57,8 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
 # ----------------------------------------------------------------------------------------------------------
      
      V2.1.0   - Things I want for next major version.
+     
+     V2.0.2   - Web GUI and possibly App integration.
      
      V2.0.1   - This is going to be a lot of extra functions and indicators for things normally moditored over serial.
      
