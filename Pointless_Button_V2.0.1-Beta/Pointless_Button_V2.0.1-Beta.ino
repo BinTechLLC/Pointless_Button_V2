@@ -42,20 +42,12 @@ String serialCountOutput;
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Credentials and Links
 //-----------------------------------------------------------------------------------------------------------------------
-/*
-  #define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
-  #define FIREBASE_AUTH "YourAPIKey"
-  const char* ssid2     = "SSIDName1";
-  const char* ssidpass2 = "SSIDPassword1";
-  const char* ssid1     = "SSIDName2";
-  const char* ssidpass1 = "SSIDPassword2";
-*/
-#define FIREBASE_HOST "https://pointlessbuttonv2-2022-default-rtdb.firebaseio.com"
-#define FIREBASE_AUTH "Bddm9oBrsBKmjzKv9iUtwqO7JjpgJBwb4ObBqOra"
-const char* ssid1     = "KB-N20U";
-const char* ssidpass1 = "RollYourButt123!@#";
-const char* ssid2     = "BinTech LLC";
-const char* ssidpass2 = "FuckYouBitch123!@#";
+#define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
+#define FIREBASE_AUTH "YourAPIKey"
+const char* ssid2     = "SSIDName1";
+const char* ssidpass2 = "SSIDPassword1";
+const char* ssid1     = "SSIDName2";
+const char* ssidpass1 = "SSIDPassword2";
 const char* externalHostname = "api.ipify.org";
 const char* ntpServer = "0.debian.pool.ntp.org";
 const long  gmtOffset_sec = -21600;  // -21600 is GMT -6 or Central Time
