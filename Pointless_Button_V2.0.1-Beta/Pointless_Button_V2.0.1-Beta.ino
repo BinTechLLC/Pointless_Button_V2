@@ -38,24 +38,28 @@ String serialCountOutput;
 //-----------------------------------------------------------------------------------------------------------------------
 #include <WiFi.h>
 #include <FirebaseESP32.h>
+#include "time.h"
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Credentials and Links
 //-----------------------------------------------------------------------------------------------------------------------
 /*
-#define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
-#define FIREBASE_AUTH "YourAPIKey"
-const char* ssid2     = "SSIDName1";
-const char* ssidpass2 = "SSIDPassword1";
-const char* ssid1     = "SSIDName2";
-const char* ssidpass1 = "SSIDPassword2";
+  #define FIREBASE_HOST "https://YourRTDHostname-default-rtdb.firebaseio.com"
+  #define FIREBASE_AUTH "YourAPIKey"
+  const char* ssid2     = "SSIDName1";
+  const char* ssidpass2 = "SSIDPassword1";
+  const char* ssid1     = "SSIDName2";
+  const char* ssidpass1 = "SSIDPassword2";
 */
 #define FIREBASE_HOST "https://pointlessbuttonv2-2022-default-rtdb.firebaseio.com"
 #define FIREBASE_AUTH "Bddm9oBrsBKmjzKv9iUtwqO7JjpgJBwb4ObBqOra"
-const char* ssid2     = "BinTech LLC";
-const char* ssidpass2 = "FuckYouBitch123!@#";
 const char* ssid1     = "KB-N20U";
 const char* ssidpass1 = "RollYourButt123!@#";
+const char* ssid2     = "BinTech LLC";
+const char* ssidpass2 = "FuckYouBitch123!@#";
 const char* externalHostname = "api.ipify.org";
+const char* ntpServer = "0.debian.pool.ntp.org";
+const long  gmtOffset_sec = -21600;  // -21600 is GMT -6 or Central Time
+const int   daylightOffset_sec = 3600;  // 3600 I have not messed with this yet
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Definitions and States
 //-----------------------------------------------------------------------------------------------------------------------
@@ -110,6 +114,14 @@ int bootErrorCount;
 int updateErrorCount;
 String currentSSID;
 String rebootNode;
+String currentTime;
+char yearInt[5];
+char monthInt[10];
+char dayInt[3];
+char dowInt[10];
+char hourInt[3];
+char minuteInt[3];
+char secondInt[3];
 WiFiServer server(portNumber);
 FirebaseData fbdo;
 //-----------------------------------------------------------------------------------------------------------------------
@@ -152,6 +164,32 @@ String getExternalIP() {
   }
   return line;
 }
+
+//-----------------------------------------------------------------------------------------------------------------------
+//                               Void Get Time and Date
+//-----------------------------------------------------------------------------------------------------------------------
+void getTime() {
+  struct tm timeinfo;
+  while (!getLocalTime(&timeinfo)) {
+    Serial.println("Failed to obtain time");
+    delay(500);
+    //return;
+  }
+  strftime(yearInt, 5, "%Y", &timeinfo);
+  strftime(monthInt, 10, "%m", &timeinfo);
+  strftime(dayInt, 3, "%d", &timeinfo);
+  strftime(dowInt, 10, "%A", &timeinfo);
+  strftime(hourInt, 3, "%H", &timeinfo);
+  strftime(minuteInt, 3, "%M", &timeinfo);
+  strftime(secondInt, 3, "%S", &timeinfo);
+
+  currentTime = (dowInt + String("_") + monthInt + String("-") + dayInt + String("-") + yearInt + String("_") + hourInt + String(":") + minuteInt + String(":") + secondInt);
+
+  if (serialCountOutput == "true") {
+    Serial.println(dowInt + String("_") + monthInt + String("-") + dayInt + String("-") + yearInt + String("_") + hourInt + String(":") + minuteInt + String(":") + secondInt);
+  }
+
+}
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Void WiFi First Connect
 //-----------------------------------------------------------------------------------------------------------------------
@@ -161,7 +199,7 @@ void wifiFirstConnect() {
   //WiFi.config(INADDR_NONE, INADDR_NONE, INADDR_NONE, INADDR_NONE);
   WiFi.setHostname(pbName.c_str());
   if (serialDebugOutput == "true") {
-    Serial.println(String("NETBIOS Name: ")+String(pbName));
+    Serial.println(String("NETBIOS Name: ") + String(pbName));
   }
   while (WiFi.status() != WL_CONNECTED) {
     connectResetCount ++ ;
@@ -232,6 +270,9 @@ void wifiFirstConnect() {
   Firebase.reconnectWiFi(true);  // Set Firebase To Reconnect If Wireless Fails And Reconnects
   digitalWrite(greenLED1, HIGH);
   digitalWrite(greenLED2, LOW);
+  delay(500);
+  Serial.println("Getting Time and Date");
+  getTime();
   delay(500);
   Serial.println("Reading Firebase Initial Values.");
   //----------------------------------------------------------------------------------------------------------------------- Read Default System Delay In Milliseconds.
@@ -581,8 +622,26 @@ void wifiFirstConnect() {
     }
   }
   //----------------------------------------------------------------------------------------------------------------------- #### WRITE FUNCTIONS ###############################################
-  //----------------------------------------------------------------------------------------------------------------------- Write Local Version Number
+  //----------------------------------------------------------------------------------------------------------------------- Write Boot Time
   while (firebaseCycle == 16) {
+    digitalWrite(greenLED1, HIGH);
+    digitalWrite(greenLED2, LOW);
+    if (Firebase.setString(fbdo, "/01-Counters/" + pbName + "/25-Last_Boot_Time", currentTime)) {
+      delay(defaultFirebaseWriteDelay);  // Defined At The Top
+      if (serialDebugOutput) {
+        Serial.print("Write Successful of Last Boot Time, ");
+        Serial.println(currentTime);
+      }
+      firebaseCycle = 17;
+    }
+    else {
+      Serial.println("Write Failed of Last Boot Time.");
+      firebaseCycle = 16;
+      bootErrorCount ++;
+    }
+  }
+  //----------------------------------------------------------------------------------------------------------------------- Write Local Version Number
+  while (firebaseCycle == 17) {
     digitalWrite(greenLED1, HIGH);
     digitalWrite(greenLED2, LOW);
     if (Firebase.setString(fbdo, "/01-Counters/" + pbName + "/20-Current_Local_Version_Number", currentLocalVersionNumber)) {
@@ -591,16 +650,16 @@ void wifiFirstConnect() {
         Serial.print("Write Successful of Current Local Version Number, ");
         Serial.println(currentLocalVersionNumber);
       }
-      firebaseCycle = 17;
+      firebaseCycle = 18;
     }
     else {
       Serial.println("Write Failed of Current Local Version Number.");
-      firebaseCycle = 16;
+      firebaseCycle = 17;
       bootErrorCount ++;
     }
   }
-  //----------------------------------------------------------------------------------------------------------------------- Write Locak IP
-  while (firebaseCycle == 17) {
+  //----------------------------------------------------------------------------------------------------------------------- Write Local IP
+  while (firebaseCycle == 18) {
     digitalWrite(greenLED1, LOW);
     digitalWrite(greenLED2, HIGH);
     String lip2 = WiFi.localIP().toString();
@@ -610,16 +669,16 @@ void wifiFirstConnect() {
         Serial.print("Write Successful of Local IP, ");
         Serial.println(lip);
       }
-      firebaseCycle = 18;
+      firebaseCycle = 19;
     }
     else {
       Serial.println("Write Failed of Local IP.");
-      firebaseCycle = 17;
+      firebaseCycle = 18;
       bootErrorCount ++;
     }
   }
   //----------------------------------------------------------------------------------------------------------------------- Write External IP
-  while (firebaseCycle == 18) {
+  while (firebaseCycle == 19) {
     digitalWrite(greenLED1, HIGH);
     digitalWrite(greenLED2, LOW);
     if (Firebase.setString(fbdo, "/01-Counters/" + pbName + "/18-ExternalIP", eip)) {
@@ -628,16 +687,16 @@ void wifiFirstConnect() {
         Serial.print("Write Successful of External IP, ");
         Serial.println(eip);
       }
-      firebaseCycle = 19;
+      firebaseCycle = 20;
     }
     else {
       Serial.println("Write Failed of External IP.");
-      firebaseCycle = 18;
+      firebaseCycle = 19;
       bootErrorCount ++;
     }
   }
-  //----------------------------------------------------------------------------------------------------------------------- Write Boot Cycles
-  while (firebaseCycle == 19) {
+  //----------------------------------------------------------------------------------------------------------------------- Write Current SSID
+  while (firebaseCycle == 20) {
     digitalWrite(greenLED1, LOW);
     digitalWrite(greenLED2, HIGH);
     if (bootCycles >= 1) {
@@ -650,17 +709,17 @@ void wifiFirstConnect() {
           Serial.print("Write Successful of Current SSID: ");
           Serial.println(currentSSID);
         }
-        firebaseCycle = 20;
+        firebaseCycle = 21;
       }
       else {
         Serial.println("Write Failed of Current SSID.");
-        firebaseCycle = 19;
+        firebaseCycle = 20;
         bootErrorCount ++;
       }
     }
   }
   //----------------------------------------------------------------------------------------------------------------------- Write Boot Cycles
-  while (firebaseCycle == 20) {
+  while (firebaseCycle == 21) {
     digitalWrite(greenLED1, LOW);
     digitalWrite(greenLED2, HIGH);
     if (bootCycles >= 1) {
@@ -673,11 +732,11 @@ void wifiFirstConnect() {
           Serial.print("Write Successful of Boot Cycles.");
           Serial.println(bootCycles);
         }
-        firebaseCycle = 21;
+        firebaseCycle = 22;
       }
       else {
         Serial.println("Write Failed of Boot Cycles.");
-        firebaseCycle = 20;
+        firebaseCycle = 21;
         bootErrorCount ++;
       }
     }
@@ -993,9 +1052,28 @@ void writeFirebaseUpdate() {
       updateErrorCount ++;
     }
   }
+
   if (g1Count >= (g1CountRead + 1) or g2Count >= (g2CountRead + 1) or r1Count >= (r1CountRead + 1) or r2Count >= (r2CountRead + 1)) {
-    //----------------------------------------------------------------------------------------------------------------------- Write Count 1
+    //----------------------------------------------------------------------------------------------------------------------- Write Last Update Time
     while (firebaseCycle == 14) {
+      digitalWrite(greenLED1, HIGH);
+      digitalWrite(greenLED2, LOW);
+      if (Firebase.setString(fbdo, "/01-Counters/" + pbName + "/26-Last_Update_Time", currentTime)) {
+        delay(defaultFirebaseWriteDelay);  // Defined At The Top
+        if (serialDebugOutput) {
+          Serial.print("Write Successful of Update Time, ");
+          Serial.println(currentTime);
+        }
+        firebaseCycle = 15;
+      }
+      else {
+        Serial.println("Write Failed of Update Time.");
+        firebaseCycle = 14;
+        updateErrorCount ++;
+      }
+    }
+    //----------------------------------------------------------------------------------------------------------------------- Write Count 1
+    while (firebaseCycle == 15) {
       digitalWrite(greenLED1, HIGH);
       digitalWrite(greenLED2, LOW);
       if (Firebase.setInt(fbdo, "/01-Counters/" + pbName + "/01-Count1", g1Count)) {
@@ -1004,16 +1082,16 @@ void writeFirebaseUpdate() {
           Serial.print("Write Successful of New Green 1 Count, ");
           Serial.println(g1Count);
         }
-        firebaseCycle = 15;
+        firebaseCycle = 16;
       }
       else {
         Serial.println("Write Failed of New Green 1 Count.");
-        firebaseCycle = 14;
+        firebaseCycle = 15;
         updateErrorCount ++;
       }
     }
     //----------------------------------------------------------------------------------------------------------------------- Write Count 2
-    while (firebaseCycle == 15) {
+    while (firebaseCycle == 16) {
       digitalWrite(greenLED1, LOW);
       digitalWrite(greenLED2, HIGH);
       if (Firebase.setInt(fbdo, "/01-Counters/" + pbName + "/02-Count2", g2Count)) {
@@ -1022,16 +1100,16 @@ void writeFirebaseUpdate() {
           Serial.print("Write Successful of New Green 2 Count, ");
           Serial.println(g2Count);
         }
-        firebaseCycle = 16;
+        firebaseCycle = 17;
       }
       else {
         Serial.println("Write Failed of New Green 2 Count.");
-        firebaseCycle = 15;
+        firebaseCycle = 16;
         updateErrorCount ++;
       }
     }
     //----------------------------------------------------------------------------------------------------------------------- Write Count 3
-    while (firebaseCycle == 16) {
+    while (firebaseCycle == 17) {
       digitalWrite(greenLED1, HIGH);
       digitalWrite(greenLED2, LOW);
       if (Firebase.setInt(fbdo, "/01-Counters/" + pbName + "/03-Count3", r1Count)) {
@@ -1040,16 +1118,16 @@ void writeFirebaseUpdate() {
           Serial.print("Write Successful of New Red 1 Count, ");
           Serial.println(r1Count);
         }
-        firebaseCycle = 17;
+        firebaseCycle = 18;
       }
       else {
         Serial.println("Write Failed of New Red 1 Count.");
-        firebaseCycle = 16;
+        firebaseCycle = 17;
         updateErrorCount ++;
       }
     }
     //----------------------------------------------------------------------------------------------------------------------- Write Count 4
-    while (firebaseCycle == 17) {
+    while (firebaseCycle == 18) {
       digitalWrite(greenLED1, LOW);
       digitalWrite(greenLED2, HIGH);
       if (Firebase.setInt(fbdo, "/01-Counters/" + pbName + "/04-Count4", r2Count)) {
@@ -1058,11 +1136,11 @@ void writeFirebaseUpdate() {
           Serial.print("Write Successful of New Red 2 Count, ");
           Serial.println(r2Count);
         }
-        firebaseCycle = 18;
+        firebaseCycle = 19;
       }
       else {
         Serial.println("Write Failed of New Red 2 Count.");
-        firebaseCycle = 17;
+        firebaseCycle = 18;
         updateErrorCount ++;
       }
     }
@@ -1163,6 +1241,7 @@ void setup() {
   serialCountOutput = "true";
   serialDebugOutput = "true";
   firebaseCycle = 0;
+  configTime(gmtOffset_sec, daylightOffset_sec, ntpServer);  //init and get the time from ntp and store it locally
   if (serialDebugOutput == "true") {
     Serial.begin(115200);
     if (!Serial) {
@@ -1181,21 +1260,23 @@ void setup() {
   pinMode(greenLED2, OUTPUT);
   pinMode(redLED1, OUTPUT);
   pinMode(redLED2, OUTPUT);
-  if (serialDebugOutput == "true") {
-    Serial.println("Testing LEDs");
-  }
   digitalWrite(greenLED1, LOW);
   digitalWrite(greenLED2, LOW);
   digitalWrite(redLED1, LOW);
   digitalWrite(redLED2, LOW);
   WiFi.disconnect();
   wifiFirstConnect();
+  getTime();
+  if (serialDebugOutput == "true") {
+    Serial.println("Testing LEDs");
+  }
   testLEDs();
 }
 //-----------------------------------------------------------------------------------------------------------------------
 //                               Void Loop
 //-----------------------------------------------------------------------------------------------------------------------
 void loop() {
+  getTime();
   writeBootCycles = 0;
   if (WiFi.status() != 3) {
     WiFi.disconnect();
