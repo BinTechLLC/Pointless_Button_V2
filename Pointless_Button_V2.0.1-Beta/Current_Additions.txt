@@ -3,6 +3,9 @@ V2.0.1-Beta
 - ##-##-2022
 - 
 
+- 12-03-2022
+- Added NTP Read for Time Recording of Boot and Update times in Firebase
+
 - 12-01-2022
 - Added NETBIOS name configuration to pull from pbName string so it no longer shows "esp32-arduino" on the network.
 
