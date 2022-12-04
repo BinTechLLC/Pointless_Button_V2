@@ -45,7 +45,7 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
               
               
      V2.0.2   - *Add Create New Node Function for New Boxes
-              - *
+              - *Firebase Directory Restructure to group like things together. (Previous to this it was in order of as added.)
               
      V2.0.3   - *Local Web GUI
               - *Maybe App functionality
