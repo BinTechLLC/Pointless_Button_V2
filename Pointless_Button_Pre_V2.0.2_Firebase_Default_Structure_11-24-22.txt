@@ -1,0 +1,34 @@
+root
+	00-Global
+		00-Current_Release_Version:V2.0.0
+		01-Current_Beta_Release_Version:V2.0.1-Beta
+	01-Counters
+		PB###
+			00-PB_Number:PB###
+			01-Count1:0
+			02-Count2:0
+			03-Count3:0
+			04-Count4:0
+			05-Count5:0
+			06-Count6:0
+			07-Count7:0
+			08-Count8:0
+			09-Count9:0
+			10-Count10:0
+			11-Default_System_Delay_In_Milliseconds:50
+			12-Default_Update_Delay_In_Seconds:300
+			13-Default_Firebase_Write_Delay:100
+			14-Default_Firebase_Read_Delay:50
+			15-Port_Number:80
+			16-WiFi_Reset_Cycles:10
+			17-LocalIP:###.###.###.###
+			18-ExternalIP:###.###.###.###
+			19-Reboot_Node:false
+			20-Current_Local_Version_Number:V2.0.0
+			21-Current_Connected_SSID:SSIDNAME
+			22-Boot_Count:#
+			23-Serial_Debug_Output:true
+			24-Serial_Count_Output:false
+			25-Last_Boot_Time
+			26-Last_Update_Time
+			
