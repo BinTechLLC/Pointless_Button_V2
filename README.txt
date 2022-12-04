@@ -80,7 +80,25 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
 # ----------------------------------------------------------------------------------------------------------
 3                        Current Order Of Operations (How it works / runs)
 # ----------------------------------------------------------------------------------------------------------
+      
+      Current Process (>= V1.0.1-Beta)
+      - Power On
+      - Green Button 1 will begin to flash as it attempts to connect to WiFi
+      - Once it connects to one of two SSIDs, Green Button 1 will stay illuminated for one second.
+      - The green buttons will alternate as it steps through the Firebase read / write functions.
+      - When all boot up functions have been successful, it will illuminate both green buttons saying it is done.
+      - If there were any errors in the boot process, red button 1 will also illuminate while both green buttons are indicating a done state.
+      - If there were any errors in the update process, red button 2 will also illuminate while both green buttons are indicating a done state.
+      - After that, each button will turn on in order once then turn off to test the LEDs.
+      - It will update the count based on the "Default_Update_Delay_In_Seconds" variable in Firebase, by default I set them to 600 secons (10 minutes)
+      so it does not overload Firebase with a bunch of requests each time the buttons are pressed. This also stops button lag from occuring while pressing
+      them. Future plan is to run the Firebase stuff as a sub process in Python so it does not interupt the counting cycle, this update is dependant on
+      the choice of hardware in the fugure for the next major version release. This is planned to be changed to follow strftime for update times and not system delays.
+      - During an update cycle, both green buttons will flash back and forth as it runs through the read  write process and show any errors as described above.
+      - Once it is finished, it goes back to counting and illuminating on button presses.
 
+
+      Old Process (V1.0.0)
       - Power On
       - Green Button 1 will begin to flash as it attempts to connect to WiFi.
       - Connect to 1 of 2 SSIDs, tries one, if it fails, it tries the second one, if they both fail, it reboots the whole ESP32 and starts from the begining.
