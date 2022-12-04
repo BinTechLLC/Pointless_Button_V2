@@ -44,7 +44,10 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
               - *Add Remote LED Test Trigger
               
               
-     V2.0.2   - *Local Web GUI
+     V2.0.2   - *Add Create New Node Function for New Boxes
+              - *
+              
+     V2.0.3   - *Local Web GUI
               - *Maybe App functionality
               - *
               
