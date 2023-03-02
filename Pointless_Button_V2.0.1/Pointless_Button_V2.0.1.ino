@@ -46,11 +46,11 @@
 //                      All Credentials
 //--------------------------------------------------------------------------------------------------
 //------------------------------------------------- Firebase Host and Token
-#define FIREBASE_HOST "https://YourTRDOnFirebase-rtdb.firebaseio.com"
+#define FIREBASE_HOST "https://YourRTDOnFirebase-rtdb.firebaseio.com"
 #define FIREBASE_AUTH "YourAuthKeyFromFirebase"
 //------------------------------------------------- Local WiFi Credentials
-//const char* ssid     = "Test2021";
-//const char* password = "Test2021Pass";
+const char* ssid     = "Test2021";
+const char* password = "Test2021Pass";
 //------------------------------------------------- Get External IP Address (Recommended not to change)
 const char* hostName = "api.ipify.org";
 //--------------------------------------------------------------------------------------------------
