@@ -1,5 +1,9 @@
 Pointless_Button_V2 - Next Planned Release Version Date: September 2023
 
+Current Release Version       : V2.0.1                 Release Date: 3-2-2023
+
+Current Beta Release Version  : V2.0.2-Beta            Release Date: TBA
+
 HARDWARE SUBJECT TO CHANGE!! - Current Hardware: ESP32_WROOM32_DEV_MODULE
 
 Just a heads up, this is my master notes doc and will change quite frequently while I am working on the project.
