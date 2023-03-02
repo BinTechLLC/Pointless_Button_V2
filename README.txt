@@ -1,4 +1,4 @@
-Pointless_Button_V2 - Next Planned Release Version Date: February 2023
+Pointless_Button_V2 - Next Planned Release Version Date: September 2023
 
 HARDWARE SUBJECT TO CHANGE!! - Current Hardware: ESP32_WROOM32_DEV_MODULE
 
@@ -40,20 +40,24 @@ Just a heads up, this is my master notes doc and will change quite frequently wh
               - Add Firebase Read Entry for Serial Debug Output and Serial Count Output
               - Added NETBIOS name configuration to pull from pbName string so it no longer shows "esp32-arduino" on the network.
               - Add NTP Read and strftime Variables
+                        - Now that NTP and strftime are working, rework code to run based on that for time like the original Python version did, rather than system delays. This will give the updates more rounded update times and would ignore the time needed to perform update operations. Right now it has a default system delay of 50 ms, every 50 ms it increases a count cycle by 1, which reads the default update delay, and for every amount of cycles that is equal to 1 second, it adds to the delay second count. When the delay second count hits the default update count number, it runs the update, the update also takes some time and while it is running, it stops counting system ticks. So a 600 second or 10 minute update delay is actually something like 660 seconds on the high end if the WiFi signal is not that great. The time.h library is still keeping track of time in the background with millis and will update at the next 600 second interval but does not wait for the 60 ish seconds the update takes to keep counting for the net update. After a few days of it running, the updates will slowly start to loose time frame due to the read write delay of the update process, so your boot time might be 01:00:00 but the last update after a few days can be at 01:23:12 or something, I just pulled those numbers and did not really do the math. But with time.h running it, the updates would come in as 01:00:00, 01:10:00, 01:20:00, and so on. I assume the seconds will be that accurate with it checking time every 50 ms, or 20 times a second. It should also be noted that it only pulls time once during the First WiFi Connect function and then uses the onboard memory to keep track of it from ther on out, it will only update again if it has to reconnect to the WiFi. I assume it can be configured to pull it every time it needs it but that seems excessive and would also add more to network usage.
               - Add Last Boot Time and Last Update Time Firebase Entries
-              - *Add Remote LED Test Trigger
+              - Add Remote LED Test Trigger
               
               
-     V2.0.2   - *Add Create New Node Function for New Boxes
+    V2.0.2    - Added USB port extension faceplate to conduit box so it doesn't need to be opened to be connected to.
+              - Found issue with USB port, still have to open to push download button on chip.
+                        - Added jumper wires to download button on chip and wired to isolated USB faceplate screws on outside of box.
+                        - Now make contact with both screws with a jumper wire to trigger download mode.
+              
+              
+     V2.0.3   - *Add Create New Node Function for New Boxes
               - *Firebase Directory Restructure to group like things together. (Previous to this it was in order of as added.)
               - *Change out delay clock for NTP clock to control update times. **V2.0.2-NTP
               
-     V2.0.3   - *Local Web GUI
+     V2.0.4   - *Local Web GUI
               - *Maybe App functionality
               - *
-    
-    
-     V2.0.2   - *Now that NTP and strftime are working, rework code to run based on that for time like the original Python version did, rather than system delays. This will give the updates more rounded update times and would ignore the time needed to perform update operations. Right now it has a default system delay of 50 ms, every 50 ms it increases a count cycle by 1, which reads the default update delay, and for every amount of cycles that is equal to 1 second, it adds to the delay second count. When the delay second count hits the default update count number, it runs the update, the update also takes some time and while it is running, it stops counting system ticks. So a 600 second or 10 minute update delay is actually something like 660 seconds on the high end if the WiFi signal is not that great. The time.h library is still keeping track of time in the background with millis and will update at the next 600 second interval but does not wait for the 60 ish seconds the update takes to keep counting for the net update. After a few days of it running, the updates will slowly start to loose time frame due to the read write delay of the update process, so your boot time might be 01:00:00 but the last update after a few days can be at 01:23:12 or something, I just pulled those numbers and did not really do the math. But with time.h running it, the updates would come in as 01:00:00, 01:10:00, 01:20:00, and so on. I assume the seconds will be that accurate with it checking time every 50 ms, or 20 times a second. It should also be noted that it only pulls time once during the First WiFi Connect function and then uses the onboard memory to keep track of it from ther on out, it will only update again if it has to reconnect to the WiFi. I assume it can be configured to pull it every time it needs it but that seems excessive and would also add more to network usage.
               
               
      V2.1.0   - *
